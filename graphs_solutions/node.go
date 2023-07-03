@@ -3,8 +3,8 @@ package graphs
 // Node is a struct containing a label and a slice of edges.
 // It is used to represent a node in a graph.
 type Node struct {
-	Label string
-	Edges []Edge
+	Label      string
+	neighbours []*Node
 }
 
 // New creates a new Node.
@@ -19,7 +19,7 @@ func (n *Node) String() string {
 
 // NeighbourCount returns the number of neighbours of a node.
 func (n *Node) NeighbourCount() int {
-	return len(n.Edges)
+	return len(n.neighbours)
 
 	// Die Anzahl der Nachbarn ist die Anzahl der Kanten, die von diesem Knoten ausgehen.
 }
@@ -27,9 +27,9 @@ func (n *Node) NeighbourCount() int {
 // GetNeighbour returns the neighbour with the given label.
 // If no neighbour with the given label exists, nil is returned.
 func (n *Node) GetNeighbour(label string) *Node {
-	for _, e := range n.Edges {
-		if e.To.Label == label {
-			return e.To
+	for _, nb := range n.neighbours {
+		if nb.Label == label {
+			return nb
 		}
 	}
 	return nil
@@ -53,7 +53,7 @@ func (n *Node) AddNeighbourNode(m *Node) {
 	if m == nil || n.GetNeighbour(m.Label) != nil {
 		return
 	}
-	n.Edges = append(n.Edges, *NewEdgeNode(m))
+	n.neighbours = append(n.neighbours, m)
 
 	// Füge eine neue Kante mittels NewEdgeNode von diesem Knoten zu m hinzu.
 	// Prüfe vorher, ob der neue Knoten überhaupt existiert und ob noch kein
@@ -64,10 +64,10 @@ func (n *Node) AddNeighbourNode(m *Node) {
 // NeighboursMaxDistance returns all neighbours of a node with a distance of at most maxDistance.
 func (n *Node) NeighboursMaxDistance(maxDistance int) []*Node {
 	neighbours := []*Node{}
-	for _, e := range n.Edges {
-		neighbours = append(neighbours, e.To)
+	for _, nb := range n.neighbours {
+		neighbours = append(neighbours, nb)
 		if maxDistance > 1 {
-			neighbours = append(neighbours, e.To.NeighboursMaxDistance(maxDistance-1)...)
+			neighbours = append(neighbours, nb.NeighboursMaxDistance(maxDistance-1)...)
 		}
 	}
 
@@ -103,8 +103,8 @@ func (n *Node) CanReachLabel_MaxDepth(label string, maxDepth int) bool {
 	if maxDepth == 0 {
 		return false
 	}
-	for _, e := range n.Edges {
-		if e.To.CanReachLabel_MaxDepth(label, maxDepth-1) {
+	for _, nb := range n.neighbours {
+		if nb.CanReachLabel_MaxDepth(label, maxDepth-1) {
 			return true
 		}
 	}
