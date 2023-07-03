@@ -20,8 +20,6 @@ func (n *Node) String() string {
 // NeighbourCount returns the number of neighbours of a node.
 func (n *Node) NeighbourCount() int {
 	return len(n.neighbours)
-
-	// Die Anzahl der Nachbarn ist die Anzahl der Kanten, die von diesem Knoten ausgehen.
 }
 
 // GetNeighbour returns the neighbour with the given label.
