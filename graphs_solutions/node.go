@@ -32,7 +32,7 @@ func (n *Node) GetNeighbour(label string) *Node {
 	}
 	return nil
 
-	// Laufe durch alle Kanten und prüfe, ob der Zielknoten der Kante das gesuchten Label hat.
+	// Laufe durch alle Nachbarn und prüfe, ob der Knoten das gesuchte Label hat.
 }
 
 // AddNeighbour adds a neighbour with a label to a node.
@@ -53,7 +53,7 @@ func (n *Node) AddNeighbourNode(m *Node) {
 	}
 	n.neighbours = append(n.neighbours, m)
 
-	// Füge eine neue Kante mittels NewEdgeNode von diesem Knoten zu m hinzu.
+	// Füge m zu n.neighbours hinzu.
 	// Prüfe vorher, ob der neue Knoten überhaupt existiert und ob noch kein
 	// Knoten mit diesem Label vorhanden ist.
 	// Die letztere Prüfung kann mittels GetNeighbour erfolgen.
